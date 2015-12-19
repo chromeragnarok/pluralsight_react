@@ -5,7 +5,6 @@ var Lifecycle = require('react-router').Lifecycle;
 var About = React.createClass({
     mixins: [Lifecycle],
     routerWillLeave: function(nextLocation){
-        console.log('hello')
         return 'Your work is not saved! Are you sure you want to leave?'
     },
     render: function(){

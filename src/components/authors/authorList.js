@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var Link = require('react').Link;
 var AuthorApi = require('../../api/authorApi');
 
 var AuthorList = React.createClass({
