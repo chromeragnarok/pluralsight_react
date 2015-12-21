@@ -46257,6 +46257,14 @@ var AuthorActions = {
             actionType: ActionTypes.UPDATE_AUTHOR,
             author: updatedAuthor
         });
+    },
+
+    deleteAuthor: function deleteAuthor(author) {
+        AuthorApi.deleteAuthor(author.id);
+        Dispatcher.dispatch({
+            actionType: ActionTypes.DELETE_AUTHOR,
+            id: author.id
+        });
     }
 };
 
@@ -46484,6 +46492,8 @@ module.exports = AuthorForm;
 var React = require('react');
 var Link = require('react-router').Link;
 var AuthorApi = require('../../api/authorApi');
+var AuthorActions = require('../../actions/authorActions');
+var toastr = require('toastr');
 
 var AuthorList = React.createClass({
     displayName: 'AuthorList',
@@ -46492,11 +46502,26 @@ var AuthorList = React.createClass({
         authors: React.PropTypes.array.isRequired
     },
 
+    deleteAuthor: function deleteAuthor(id, event) {
+        event.preventDefault();
+        AuthorActions.deleteAuthor(id);
+        toastr.success('Author Deleted');
+    },
+
     render: function render() {
         var createAuthorRow = function createAuthorRow(author) {
             return React.createElement(
                 'tr',
                 { key: author.id },
+                React.createElement(
+                    'td',
+                    null,
+                    React.createElement(
+                        'a',
+                        { href: '#', onClick: this.deleteAuthor.bind(this, author) },
+                        'Delete'
+                    )
+                ),
                 React.createElement(
                     'td',
                     null,
@@ -46525,6 +46550,7 @@ var AuthorList = React.createClass({
                 React.createElement(
                     'tr',
                     null,
+                    React.createElement('th', null),
                     React.createElement(
                         'th',
                         null,
@@ -46548,7 +46574,7 @@ var AuthorList = React.createClass({
 
 module.exports = AuthorList;
 
-},{"../../api/authorApi":221,"react":215,"react-router":55}],227:[function(require,module,exports){
+},{"../../actions/authorActions":220,"../../api/authorApi":221,"react":215,"react-router":55,"toastr":217}],227:[function(require,module,exports){
 "use strict";
 
 var React = require('react');
@@ -46564,6 +46590,18 @@ var AuthorPage = React.createClass({
         return {
             authors: AuthorStore.getAllAuthors()
         };
+    },
+
+    componentWillMount: function componentWillMount() {
+        AuthorStore.addChangeListener(this._onChange);
+    },
+
+    componentWillUnmount: function componentWillUnmount() {
+        AuthorStore.removeChangeListener(this._onChange);
+    },
+
+    _onChange: function _onChange() {
+        this.setState({ authors: AuthorStore.getAllAuthors() });
     },
 
     render: function render() {
@@ -46859,7 +46897,8 @@ module.exports = Home;
 module.exports = {
     INITIALIZE: "INITIALIZE",
     CREATE_AUTHOR: "CREATE_AUTHOR",
-    UPDATE_AUTHOR: "UPDATE_AUTHOR"
+    UPDATE_AUTHOR: "UPDATE_AUTHOR",
+    DELETE_AUTHOR: "DELETE_AUTHOR"
 };
 
 },{}],234:[function(require,module,exports){
@@ -46868,7 +46907,8 @@ module.exports = {
 module.exports = {
     INITIALIZE: "INITIALIZE",
     CREATE_AUTHOR: "CREATE_AUTHOR",
-    UPDATE_AUTHOR: "UPDATE_AUTHOR"
+    UPDATE_AUTHOR: "UPDATE_AUTHOR",
+    DELETE_AUTHOR: "DELETE_AUTHOR"
 };
 
 },{}],235:[function(require,module,exports){
@@ -46971,6 +47011,13 @@ Dispatcher.register(function (action) {
             var existingAuthor = _.find(_authors, { id: action.author.id });
             var existingAuthorIndex = _.indexOf(_authors, existingAuthor);
             _authors.splice(existingAuthorIndex, 1, action.author);
+            AuthorStore.emitChange();
+            break;
+
+        case ActionTypes.DELETE_AUTHOR:
+            _.remove(_authors, function (author) {
+                return action.id === author.id;
+            });
             AuthorStore.emitChange();
             break;
 
