@@ -17,6 +17,7 @@
     "history": "^1.15.0",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
+    "object-assign": "^4.0.1",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-router": "^1.0.1",

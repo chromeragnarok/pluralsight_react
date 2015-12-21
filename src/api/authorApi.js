@@ -15,20 +15,20 @@ var _clone = function(item) {
 
 var AuthorApi = {
 	getAllAuthors: function() {
-		return _clone(authors); 
+		return _clone(authors);
 	},
 
 	getAuthorById: function(id) {
 		var author = _.find(authors, {id: id});
 		return _clone(author);
 	},
-	
+
 	saveAuthor: function(author) {
 		//pretend an ajax call to web api is made here
 		console.log('Pretend this just saved the author to the DB via AJAX call...');
-		
+
 		if (author.id) {
-			var existingAuthorIndex = _.indexOf(authors, _.find(authors, {id: author.id})); 
+			var existingAuthorIndex = _.indexOf(authors, _.find(authors, {id: author.id}));
 			authors.splice(existingAuthorIndex, 1, author);
 		} else {
 			//Just simulating creation here.

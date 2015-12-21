@@ -1,7 +1,7 @@
 "use strict";
 
 var React = require('react');
-var Link = require('react').Link;
+var Link = require('react-router').Link;
 var AuthorApi = require('../../api/authorApi');
 
 var AuthorList = React.createClass({
@@ -13,7 +13,7 @@ var AuthorList = React.createClass({
         var createAuthorRow = function(author){
             return (
                 <tr key={author.id}>
-                    <td><Link to="/authors" params={{id: author.id}}>{author.id}</Link></td>
+                    <td><Link to={`/authors/${author.id}`}>{author.id}</Link></td>
                     <td>{author.firstName} {author.lastName}</td>
                 </tr>
             );
