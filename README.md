@@ -1,4 +1,4 @@
 # pluralsight_react
-[Quora test](quora://question/(24520))
+[Quora test](quora://question/)
 
 [Google](https://www.google.com)
